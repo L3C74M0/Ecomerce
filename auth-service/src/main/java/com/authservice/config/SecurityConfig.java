@@ -17,6 +17,12 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final String[] PUBLIC_ENDPOINTS = {
+        "/public",
+        "/swagger-ui/**",
+        "/v3/api-docs/**"
+    };
+
     @Value("${JWT_SECRET}")
     private String jwtSecret;
 
@@ -33,7 +39,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
                 // Rutas públicas
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                 // Todas las demás requieren autenticación
                 .anyRequest().authenticated()
             )
