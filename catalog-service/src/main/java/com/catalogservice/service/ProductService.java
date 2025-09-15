@@ -2,13 +2,13 @@ package com.catalogservice.service;
 
 import java.util.List;
 
+import com.catalogservice.dto.ProductCreateDTO;
 import com.catalogservice.dto.ProductDTO;
 import com.catalogservice.dto.ProductUpdateDTO;
-import com.catalogservice.entity.Product;
 
 public interface ProductService {
 
-    ProductDTO createProduct(Product product);
+    ProductDTO createProduct(ProductCreateDTO dto);
 
     ProductDTO updateProduct(Long id, ProductUpdateDTO dto);
 

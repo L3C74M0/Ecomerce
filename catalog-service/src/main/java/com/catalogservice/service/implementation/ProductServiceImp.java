@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.catalogservice.dto.ProductCreateDTO;
 import com.catalogservice.dto.ProductDTO;
 import com.catalogservice.dto.ProductUpdateDTO;
 import com.catalogservice.entity.Product;
+import com.catalogservice.exception.InvalidInputException;
+import com.catalogservice.exception.ResourceNotFoundException;
 import com.catalogservice.mapper.ProductMapper;
 import com.catalogservice.repository.ProductRepository;
 import com.catalogservice.service.ProductService;
@@ -21,39 +24,59 @@ public class ProductServiceImp implements ProductService {
     private final ProductMapper productMapper;
 
     @Override
-    public ProductDTO createProduct(Product product) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createProduct'");
+    public ProductDTO createProduct(ProductCreateDTO dto) {
+        if (productRepository.existsByName(dto.getName())) {
+            throw new InvalidInputException("Product with name " + dto.getName() + " already exists.");
+        }
+
+        Product product = productMapper.toEntity(dto);
+        product = productRepository.save(product);
+
+        return productMapper.toDto(product);
     }
 
     @Override
     public ProductDTO updateProduct(Long id, ProductUpdateDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateProduct'");
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found."));
+
+        productMapper.updateEntityFromDTO(dto, product);
+
+        product = productRepository.save(product);
+        return productMapper.toDto(product);
     }
 
     @Override
     public void deleteProduct(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteProduct'");
+        if(!productRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Product with id " + id + " not found.");
+        }
+
+        productRepository.deleteById(id);
     }
 
     @Override
     public ProductDTO getProductById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProductById'");
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found."));
+        
+        return productMapper.toDto(product);
     }
 
     @Override
     public List<ProductDTO> getAllProducts() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllProducts'");
+        return productRepository.findAll()
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
     @Override
     public List<ProductDTO> searchProductsByName(String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchProductsByName'");
+        return productRepository.findAll().stream()
+                .filter(product -> product.getName().toLowerCase().contains(name.toLowerCase()))
+                .map(productMapper::toDto)
+                .toList();
     }
 
 }

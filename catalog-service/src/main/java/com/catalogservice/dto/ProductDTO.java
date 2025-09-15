@@ -12,26 +12,27 @@ import lombok.Data;
 @Data
 public class ProductDTO {
 
+    @NotNull(message = "Id is mandatory")
     private Long id;
 
-    @NotBlank(message = "El nombre no puede estar vacío")
-    @Size(max = 100, message = "El nombre no puede tener más de 100 caracteres")
+    @NotBlank(message = "Name is mandatory")
+    @Size(max = 100, message = "The name must not exceed 100 characters")
     private String name;
 
-    @NotBlank(message = "La descripción no puede estar vacía")
+    @NotBlank(message = "Description is mandatory")
     private String description;
 
-    @NotNull(message = "El precio es obligatorio")
-    @DecimalMin(value = "0.0", inclusive = false, message = "El precio debe ser mayor que cero")
+    @NotNull(message = "Price is mandatory")
+    @DecimalMin(value = "0.0", inclusive = false, message = "The price must be greater than 0")
     private BigDecimal price;
 
-    @NotBlank(message = "El estado es obligatorio")
+    @NotBlank(message = "Status is mandatory")
     private String status;
 
-    @NotNull(message = "El stock es obligatorio")
-    @Min(value = 0, message = "El stock no puede ser negativo")
+    @NotNull(message = "Stock is mandatory")
+    @Min(value = 0, message = "Stock must be zero or greater")
     private Integer stock;
 
-    private Boolean active;
+    private boolean active;
 }
     
