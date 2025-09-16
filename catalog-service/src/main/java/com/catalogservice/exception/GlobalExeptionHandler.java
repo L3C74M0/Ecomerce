@@ -1,7 +1,5 @@
 package com.catalogservice.exception;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,20 +37,14 @@ public class GlobalExeptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationError(MethodArgumentNotValidException ex) {
-        List<ValidationError> validationErrors = ex.getBindingResult()
+        String errorMessage = ex.getBindingResult()
             .getFieldErrors()
             .stream()
-            .map(error -> new ValidationError(error.getField(), error.getDefaultMessage()))
-            .toList();
+            .map(error -> error.getField() + ": " + error.getDefaultMessage())
+            .findFirst()
+            .orElse("Invalid input");
 
-        ErrorResponse errorResponse = new ErrorResponse(
-            "Validation failed",
-            HttpStatus.BAD_REQUEST.getReasonPhrase(),
-            HttpStatus.BAD_REQUEST.value()
-        );
-        errorResponse.setValidationErrors(validationErrors);
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return buildResponse(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
 }
