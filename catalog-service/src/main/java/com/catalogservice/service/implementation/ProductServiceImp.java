@@ -8,7 +8,7 @@ import com.catalogservice.dto.ProductCreateDTO;
 import com.catalogservice.dto.ProductDTO;
 import com.catalogservice.dto.ProductUpdateDTO;
 import com.catalogservice.entity.Product;
-import com.catalogservice.exception.InvalidInputException;
+import com.catalogservice.exception.DuplicatedResourceException;
 import com.catalogservice.exception.ResourceNotFoundException;
 import com.catalogservice.mapper.ProductMapper;
 import com.catalogservice.repository.ProductRepository;
@@ -26,7 +26,7 @@ public class ProductServiceImp implements ProductService {
     @Override
     public ProductDTO createProduct(ProductCreateDTO dto) {
         if (productRepository.existsByName(dto.getName())) {
-            throw new InvalidInputException("Product with name " + dto.getName() + " already exists.");
+            throw new DuplicatedResourceException("Product with name " + dto.getName() + " already exists.");
         }
 
         Product product = productMapper.toEntity(dto);
