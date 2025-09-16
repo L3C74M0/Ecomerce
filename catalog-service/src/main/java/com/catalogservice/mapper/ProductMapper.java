@@ -17,10 +17,10 @@ public interface ProductMapper {
     @Mapping(target = "status", expression = "java(product.getStatus().name())")
     ProductDTO toDto(Product product);
 
-    @Mapping(target = "status", expression = "java(ProductStatus.valueOf(dto.getStatus()))")
+    @Mapping(target = "status", expression = "java(com.catalogservice.entity.ProductStatus.valueOf(dto.getStatus()))")
     Product toEntity(ProductCreateDTO dto);
 
-    @Mapping(target = "status", expression = "java(ProductStatus.valueOf(dto.getStatus()))")
+    @Mapping(target = "status", expression = "java(com.catalogservice.entity.ProductStatus.valueOf(dto.getStatus()))")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDTO(ProductUpdateDTO dto, @MappingTarget Product entity);
 
