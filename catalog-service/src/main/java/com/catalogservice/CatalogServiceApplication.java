@@ -9,7 +9,7 @@ public class CatalogServiceApplication {
 
 	public static void main(String[] args) {
 		Dotenv dotenv = Dotenv.configure()
-            .directory("./") // o "./auth-service" si estás fuera del microservicio
+            .directory("./")
             .ignoreIfMalformed()
             .ignoreIfMissing()
             .load();

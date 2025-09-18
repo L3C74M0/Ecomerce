@@ -34,7 +34,7 @@ public class InventoryController {
     }
 
     @PostMapping
-    public ResponseEntity<InventoryResponseDTO> create(@Valid @RequestBody InventoryCreateDTO dto) {
+    public ResponseEntity<InventoryResponseDTO> create(@Valid @RequestBody InventoryCreateDTO dto) {        
         InventoryResponseDTO response = inventoryService.create(dto);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
