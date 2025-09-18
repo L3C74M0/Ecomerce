@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 
 import com.inventoryservice.dto.InventoryCreateDTO;
 import com.inventoryservice.dto.InventoryResponseDTO;
+import com.inventoryservice.entity.Inventory;
+import com.inventoryservice.exception.ResourceNotFoundException;
 import com.inventoryservice.mapper.InventoryMapper;
 import com.inventoryservice.repository.InventoryRepository;
 import com.inventoryservice.service.InventoryService;
@@ -19,26 +21,38 @@ public class InventoryServiceImp implements InventoryService {
 
     @Override
     public InventoryResponseDTO findByProductId(Long productId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByProductId'");
+        Inventory inventory = inventoryRepository.findByProductId(productId)
+            .orElseThrow(() -> new ResourceNotFoundException("Stock not found for product id: " + productId));
+
+        return inventoryMapper.toResponseDTO(inventory);
     }
 
     @Override
     public InventoryResponseDTO create(InventoryCreateDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+        Inventory inventory = inventoryMapper.toEntity(dto);
+        inventory = inventoryRepository.save(inventory);
+
+        return inventoryMapper.toResponseDTO(inventory);
     }
 
     @Override
     public void UpdateStock(Long productId, Integer quantity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'UpdateStock'");
+        Inventory inventory = inventoryRepository.findByProductId(productId)
+            .orElseThrow(() -> new ResourceNotFoundException("Stock not found for product id: " + productId));
+
+        if (inventory.getQuantity() < quantity) {
+            throw new IllegalArgumentException("Insufficient stock for product id: " + productId);
+        }
+
+        inventory.setQuantity(inventory.getQuantity() - quantity);
     }
 
     @Override
     public void releaseStock(Long productId, Integer quantity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'releaseStock'");
+        Inventory inventory = inventoryRepository.findByProductId(productId)
+            .orElseThrow(() -> new ResourceNotFoundException("Stock not found for product id: " + productId));
+
+        inventory.setQuantity(inventory.getQuantity() + quantity);
     }
 
 }
