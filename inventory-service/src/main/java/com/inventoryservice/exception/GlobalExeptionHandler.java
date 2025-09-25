@@ -37,4 +37,9 @@ public class GlobalExeptionHandler {
         return buildResponse(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(DuplicatedResourceException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateResource(DuplicatedResourceException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
 }

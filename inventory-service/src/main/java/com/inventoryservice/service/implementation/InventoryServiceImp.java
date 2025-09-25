@@ -6,6 +6,7 @@ import com.inventoryservice.dto.InventoryCreateDTO;
 import com.inventoryservice.dto.InventoryResponseDTO;
 import com.inventoryservice.entity.Inventory;
 import com.inventoryservice.exception.ResourceNotFoundException;
+import com.inventoryservice.exception.DuplicatedResourceException;
 import com.inventoryservice.mapper.InventoryMapper;
 import com.inventoryservice.repository.InventoryRepository;
 import com.inventoryservice.service.InventoryService;
@@ -29,6 +30,10 @@ public class InventoryServiceImp implements InventoryService {
 
     @Override
     public InventoryResponseDTO create(InventoryCreateDTO dto) {
+        inventoryRepository.findByProductId(dto.getProductId()).ifPresent(existing -> {
+            throw new DuplicatedResourceException("Product with id " + dto.getProductId() + " already exists.");
+        });
+        
         Inventory inventory = inventoryMapper.toEntity(dto);
         inventory = inventoryRepository.save(inventory);
 
