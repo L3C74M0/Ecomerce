@@ -13,4 +13,5 @@ public interface InventoryService {
 
     void releaseStock(Long productId, Integer quantity);
     
+    boolean hasSufficientStock(Long productId, int quantity);
 }

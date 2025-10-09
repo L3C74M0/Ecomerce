@@ -7,6 +7,7 @@ import com.inventoryservice.dto.InventoryResponseDTO;
 import com.inventoryservice.entity.Inventory;
 import com.inventoryservice.exception.ResourceNotFoundException;
 import com.inventoryservice.exception.DuplicatedResourceException;
+import com.inventoryservice.exception.InsufficientStockException;
 import com.inventoryservice.mapper.InventoryMapper;
 import com.inventoryservice.repository.InventoryRepository;
 import com.inventoryservice.service.InventoryService;
@@ -46,7 +47,7 @@ public class InventoryServiceImp implements InventoryService {
             .orElseThrow(() -> new ResourceNotFoundException("Stock not found for product id: " + productId));
 
         if (inventory.getQuantity() < quantity) {
-            throw new IllegalArgumentException("Insufficient stock for product id: " + productId);
+            throw new InsufficientStockException("Insufficient stock for product id: " + productId);
         }
 
         inventory.setQuantity(inventory.getQuantity() - quantity);
@@ -58,6 +59,13 @@ public class InventoryServiceImp implements InventoryService {
             .orElseThrow(() -> new ResourceNotFoundException("Stock not found for product id: " + productId));
 
         inventory.setQuantity(inventory.getQuantity() + quantity);
+    }
+
+    @Override
+    public boolean hasSufficientStock(Long productId, int quantity) {
+        return inventoryRepository.findByProductId(productId)
+            .map(i -> i.getQuantity() >= quantity)
+            .orElse(false);
     }
 
 }
