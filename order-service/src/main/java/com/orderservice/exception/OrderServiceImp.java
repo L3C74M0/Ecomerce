@@ -1,9 +1,10 @@
-package com.orderservice.service.implementation;
+package com.orderservice.exception;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.orderservice.dto.OrderCreateDTO;
@@ -11,8 +12,6 @@ import com.orderservice.dto.OrderViewDTO;
 import com.orderservice.entity.Order;
 import com.orderservice.entity.OrderItem;
 import com.orderservice.entity.OrderStatus;
-import com.orderservice.exception.OrderAlreadyConfirmedException;
-import com.orderservice.exception.ResourceNotFoundException;
 import com.orderservice.mapper.OrderMapper;
 import com.orderservice.repository.OrderRepository;
 import com.orderservice.service.OrderService;
@@ -75,7 +74,7 @@ public class OrderServiceImp implements OrderService{
         .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + id));
 
         if (order.getStatus().equals(OrderStatus.CONFIRMED)) {
-            throw new OrderAlreadyConfirmedException("Cannot cancel a confirmed order");
+            throw new IllegalStateException("Cannot cancel a confirmed order");
         }
 
         order.setStatus(OrderStatus.CANCELLED);
