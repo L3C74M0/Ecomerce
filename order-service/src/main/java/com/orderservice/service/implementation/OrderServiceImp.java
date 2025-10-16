@@ -9,10 +9,10 @@ import com.orderservice.dto.OrderCreateDTO;
 import com.orderservice.dto.OrderViewDTO;
 import com.orderservice.entity.Order;
 import com.orderservice.entity.OrderStatus;
-import com.orderservice.event.OrderEventProducer;
 import com.orderservice.exception.OrderAlreadyConfirmedException;
 import com.orderservice.exception.ResourceNotFoundException;
 import com.orderservice.mapper.OrderMapper;
+import com.orderservice.messaging.OrderEventProducer;
 import com.orderservice.repository.OrderRepository;
 import com.orderservice.service.OrderService;
 

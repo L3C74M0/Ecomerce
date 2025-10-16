@@ -1,7 +1,9 @@
-package com.orderservice.event;
+package com.orderservice.messaging;
 
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+
+import com.orderservice.event.OrderCreatedEvent;
 
 import lombok.RequiredArgsConstructor;
 
