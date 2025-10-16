@@ -26,6 +26,10 @@ spring:
         jwt:
           secret: ${JWT_SECRET}
 
+kafka:
+  topics:
+    orderCreated: order.order_created
+
 springdoc:
   api-docs:
     path: /v3/api-docs

@@ -56,4 +56,10 @@ public class Order {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public void calculateTotalAmount() {
+        this.totalAmount = items.stream()
+            .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
 }

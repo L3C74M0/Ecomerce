@@ -6,11 +6,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orderservice.dto.OrderCreateDTO;
 import com.orderservice.dto.OrderViewDTO;
 import com.orderservice.entity.Order;
 import com.orderservice.entity.OrderItem;
 import com.orderservice.entity.OrderStatus;
+import com.orderservice.event.OrderEventProducer;
 import com.orderservice.exception.OrderAlreadyConfirmedException;
 import com.orderservice.exception.ResourceNotFoundException;
 import com.orderservice.mapper.OrderMapper;
@@ -27,22 +29,18 @@ public class OrderServiceImp implements OrderService{
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderEventProducer orderEventProducer;
+    private final ObjectMapper objectMapper;
 
     @Override
     public OrderViewDTO createOrder(OrderCreateDTO dto) {
         Order order = orderMapper.toEntity(dto);
-        
-        BigDecimal totalAmount = order.getItems().stream()
-            .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        order.setTotalAmount(totalAmount);
-
-        for (OrderItem item : order.getItems()) {
-            item.setOrder(order);
-        }
+        order.calculateTotalAmount();
+        order.setStatus(OrderStatus.PENDING);
 
         Order saveOrder = orderRepository.save(order);
+
+        orderEventProducer.sendOrderCreatedEvent(saveOrder);
 
         return orderMapper.toviewDTO(saveOrder);
     }
