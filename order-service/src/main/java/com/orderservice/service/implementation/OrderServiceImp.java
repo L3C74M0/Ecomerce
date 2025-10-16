@@ -1,16 +1,13 @@
 package com.orderservice.service.implementation;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orderservice.dto.OrderCreateDTO;
 import com.orderservice.dto.OrderViewDTO;
 import com.orderservice.entity.Order;
-import com.orderservice.entity.OrderItem;
 import com.orderservice.entity.OrderStatus;
 import com.orderservice.event.OrderEventProducer;
 import com.orderservice.exception.OrderAlreadyConfirmedException;
@@ -30,7 +27,6 @@ public class OrderServiceImp implements OrderService{
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final OrderEventProducer orderEventProducer;
-    private final ObjectMapper objectMapper;
 
     @Override
     public OrderViewDTO createOrder(OrderCreateDTO dto) {
