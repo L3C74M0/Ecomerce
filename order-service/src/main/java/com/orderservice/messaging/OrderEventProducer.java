@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.orderservice.entity.Order;
 import com.orderservice.event.OrderCreatedEvent;
-import com.orderservice.event.OrderCreatedEvent.OrderItem;
 
 import lombok.RequiredArgsConstructor;
 

@@ -22,7 +22,7 @@ public class InventoryKafkaProducer {
             String payload = objectMapper.writeValueAsString(event);
             kafkaTemplate.send("inventory.stock_reserved", event.getOrderId(), payload);
         } catch (JsonProcessingException e) {
-
+              e.printStackTrace();
         }
     }
 
@@ -31,7 +31,7 @@ public class InventoryKafkaProducer {
             String payload = objectMapper.writeValueAsString(event);
             kafkaTemplate.send("inventory.stock_released", event.getOrderId(), payload);
         } catch (JsonProcessingException e) {
-
+              e.printStackTrace();
         }
     }
 

@@ -44,7 +44,7 @@ public class InventoryKafkaListener {
             }
 
         } catch (Exception e) {
-            
+              e.printStackTrace();
         }
     }
 
