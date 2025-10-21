@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StockReleasedEvent {
-    private String orderId;
+    private Long orderId;
     private String reason;
 }

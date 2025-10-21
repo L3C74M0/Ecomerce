@@ -13,10 +13,10 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class InventoryListener {
+public class InventoryKafkaListener {
 
     private final InventoryService inventoryService;
-    private final InventoryProducer inventoryKafkaProducer;
+    private final InventoryKafkaProducer inventoryKafkaProducer;
     private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = "order.order_created", groupId = "inventory-group")

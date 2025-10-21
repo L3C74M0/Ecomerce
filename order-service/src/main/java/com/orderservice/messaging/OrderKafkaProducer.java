@@ -1,37 +1,37 @@
-package com.inventoryservice.messaging;
+package com.orderservice.messaging;
 
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inventoryservice.event.StockReleasedEvent;
-import com.inventoryservice.event.StockReservedEvent;
+import com.orderservice.event.OrderCancelledEvent;
+import com.orderservice.event.OrderConfirmedEvent;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class InventoryProducer {
+public class OrderKafkaProducer {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<Long, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    public void publishStockReserved(StockReservedEvent event) {
+    public void publishOrderconfirmedEvent(OrderConfirmedEvent event) {
         try {
             String payload = objectMapper.writeValueAsString(event);
-            kafkaTemplate.send("inventory.stock_reserved", event.getOrderId(), payload);
+            kafkaTemplate.send("order.order_confirmed", event.getOrderId(), payload);
         } catch (JsonProcessingException e) {
-              e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
-    public void publishStockReleased(StockReleasedEvent event) {
+    public void publishOrderCancelledEvent(OrderCancelledEvent event) {
         try {
             String payload = objectMapper.writeValueAsString(event);
-            kafkaTemplate.send("inventory.stock_released", event.getOrderId(), payload);
+            kafkaTemplate.send("order.order_cancelled", event.getOrderId(), payload);
         } catch (JsonProcessingException e) {
-              e.printStackTrace();
+            e.printStackTrace();
         }
     }
 

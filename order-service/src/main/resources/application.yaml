@@ -29,6 +29,8 @@ spring:
 kafka:
   topics:
     orderCreated: order.order_created
+    stockReserved: inventory.stock_reserved
+    stockReleased: inventory.stock_released
 
 springdoc:
   api-docs:

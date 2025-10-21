@@ -1,4 +1,4 @@
-package com.inventoryservice.event;
+package com.orderservice.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

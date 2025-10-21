@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderCreateEvent {
 
-    private String orderId;
+    private Long orderId;
     private List<OrderItem> items;
 
     @Data
